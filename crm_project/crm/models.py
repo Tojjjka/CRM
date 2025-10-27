@@ -17,7 +17,10 @@ class Company(models.Model):
 
 class Client(models.Model):
     company = models.ForeignKey(
-        Company, on_delete=models.CASCADE,
+        Company,
+        on_delete=models.SET_NULL,  # вместо CASCADE
+        null=True,                   # обязательно для SET_NULL
+        blank=True,
         related_name='clients',
         verbose_name="Компания"
     )

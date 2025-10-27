@@ -40,9 +40,11 @@ def company_edit(request, pk):
     return render(request, 'crm/company_form.html', {'form': form, 'title': 'Редактировать компанию'})
 
 
+@login_required
 def company_delete(request, pk):
     company = get_object_or_404(Company, pk=pk)
     if request.method == 'POST':
+        # Клиенты останутся, поле company станет NULL автоматически
         company.delete()
         return redirect('company_list')
     return render(request, 'crm/company_confirm_delete.html', {'company': company})
