@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
 from .models import Company, Client
 from .forms import CompanyForm, ClientForm
 
@@ -8,16 +9,19 @@ def index(request):
 
 
 # ---------- Компании ----------
+@login_required
 def company_list(request):
-    companies = Company.objects.all()
+    companies = Company.objects.filter(created_by=request.user)
     return render(request, 'crm/company_list.html', {'companies': companies})
 
-
+@login_required
 def company_create(request):
     if request.method == 'POST':
         form = CompanyForm(request.POST)
         if form.is_valid():
-            form.save()
+            company = form.save(commit=False)
+            company.created_by = request.user
+            company.save()
             return redirect('company_list')
     else:
         form = CompanyForm()
@@ -45,16 +49,19 @@ def company_delete(request, pk):
 
 
 # ---------- Клиенты ----------
+@login_required
 def client_list(request):
-    clients = Client.objects.select_related('company').all()
+    clients = Client.objects.filter(responsible=request.user)
     return render(request, 'crm/client_list.html', {'clients': clients})
 
-
+@login_required
 def client_create(request):
     if request.method == 'POST':
         form = ClientForm(request.POST)
         if form.is_valid():
-            form.save()
+            client = form.save(commit=False)
+            client.responsible = request.user
+            client.save()
             return redirect('client_list')
     else:
         form = ClientForm()
