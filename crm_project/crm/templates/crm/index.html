@@ -1,0 +1,10 @@
+{% extends 'crm/base.html' %}
+{% block title %}Главная — CRM{% endblock %}
+{% block content %}
+<div class="text-center mt-5">
+    <h1>Добро пожаловать в MyCRM</h1>
+    <p class="lead mt-3">Управляй компаниями и клиентами в одном месте</p>
+    <a href="{% url 'company_list' %}" class="btn btn-primary me-2">Перейти к компаниям</a>
+    <a href="{% url 'client_list' %}" class="btn btn-outline-primary">Перейти к клиентам</a>
+</div>
+{% endblock %}
