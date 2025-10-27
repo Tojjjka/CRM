@@ -1,35 +1,40 @@
 {% extends 'crm/base.html' %}
+{% load tz %}
 {% block title %}Компании{% endblock %}
+
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2>Компании</h2>
     <a href="{% url 'company_add' %}" class="btn btn-success">➕ Добавить компанию</a>
 </div>
 
-<table class="table table-striped table-bordered">
-    <thead class="table-dark">
-        <tr>
-            <th>Название</th>
-            <th>Описание</th>
-            <th>Дата создания</th>
-            <th style="width:120px">Действия</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for company in companies %}
-        <tr>
-            <td>{{ company.name }}</td>
-            <td>{{ company.description|default:"—" }}</td>
-            <td>{{ company.created_at|date:"d.m.Y" }}</td>
-            <td>
-                <a href="{% url 'company_edit' company.pk %}" class="btn btn-sm btn-warning">✏️</a>
-                <a href="{% url 'company_delete' company.pk %}" class="btn btn-sm btn-danger">🗑️</a>
-            </td>
-        </tr>
-        {% empty %}
-        <tr><td colspan="4" class="text-center">Компаний пока нет.</td></tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        <table class="table table-striped table-hover mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>Название компании</th>
+                    <th>Описание</th>
+                    <th>Дата создания</th>
+                    <th style="width:140px">Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for company in companies %}
+                <tr>
+                    <td>{{ company.name }}</td>
+                    <td>{{ company.description|default:"—" }}</td>
+                    <td>{{ company.created_at|localtime|date:"d.m.Y H:i" }}</td>
+                    <td>
+                        <a href="{% url 'company_edit' company.pk %}" class="btn btn-sm btn-warning me-1">✏️</a>
+                        <a href="{% url 'company_delete' company.pk %}" class="btn btn-sm btn-danger">🗑️</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="text-center py-3">Компаний пока нет.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}
-
